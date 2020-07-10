@@ -26,20 +26,18 @@ def answer_five():
     census_df.set_index('COUNTY')
     census_df.sort_index()
     p=census_df['COUNTY'].max()
-    k=census_df[census_df['COUNTY']==840]
-    return k.iloc[0]['STATE']
+    k=census_df[census_df['COUNTY']==p]
+    return k.iloc[0]['STNAME']
 
 
 answer_five()
 
-
 def answer_six():
     census_df.set_index('CENSUS2010POP')
     census_df.sort_index()
-    return census_df.iloc[-4:-1]['STATE']
+    return [census_df.iloc[-4:-1]['STNAME']]
 
 answer_six()
-
 
 def answer_seven():
     an=0
@@ -69,10 +67,14 @@ def answer_seven():
         #print(mx)
         if(mx>an):
             an=mx
-            ans=census_df['COUNTY'].iloc[i]
-            print(mx,ans)
+            ans=census_df.iloc[i]['CTYNAME']
+            #print(mx,ans)
         
     return ans
+        
+        
+        
+answer_seven()
         
         
         
