@@ -32,52 +32,43 @@ def answer_five():
 
 answer_five()
 
-def answer_six():
-    census_df.set_index('CENSUS2010POP')
-    census_df.sort_index()
-    return [census_df.iloc[-4:-1]['STNAME']]
 
-answer_six()
-
-def answer_seven():
-    an=0
-    p=len(census_df)
-    
-    for i in range(0,p):
+def answer_five():
+    df=census_df[census_df['SUMLEV']==50]
+    d={}
+    ans=''
+    mx=0
+    for i in range(len(df)):
         
-        k=(census_df['POPESTIMATE2010'])
-        
-        k1=int(k.iloc[i])
-        
-        k=(census_df['POPESTIMATE2011'])
-        k2=int(k.iloc[i])
-        
-        k7=(census_df['POPESTIMATE2012'])
-        k3=int(k.iloc[i])
-        k=(census_df['POPESTIMATE2013'])
-        k4=int(k.iloc[i])
-        k=(census_df['POPESTIMATE2014'])
-        k5=int(k.iloc[i])
-        k=(census_df['POPESTIMATE2015'])
-        k6=int(k.iloc[i])
-        
-        tmp=[k1,k2,k3,k4,k5,k6]
-        #tmp
-        mx=max(tmp)-min(tmp)
-        #print(mx)
-        if(mx>an):
-            an=mx
-            ans=census_df.iloc[i]['CTYNAME']
-            #print(mx,ans)
-        
+        l1=df.iloc[i]['STATE']
+        l2=df.iloc[i]['COUNTY']
+        #print(l1,l2)
+        if(l1 in d):
+            
+            if l2 not in d[l1]:
+                d[l1].append(l2)
+        else:
+            d[l1]=[l2]
+        if(len(d[l1])>mx):
+            mx=len(d[l1])
+            ans=df.iloc[i]['STNAME']
     return ans
+
+answer_five()
+def answer_six():
+    df=census_df[census_df['SUMLEV'] == 50]
+    df1=df.sort(['STNAME','POPESTIMATE2015'],ascending=False).groupby('STNAME').head(3).copy()
+    df2 = df1.reset_index().groupby("STNAME").sum().sort(['POPESTIMATE2015'],ascending=False).head(3).copy()
+    return list(df2.index.values)
+answer_six()    
+answer_six()
         
         
+def answer_seven():
+    df=census_df[census_df['SUMLEV']==50]
+    k=df[['POPESTIMATE2010','POPESTIMATE2011','POPESTIMATE2012','POPESTIMATE2013','POPESTIMATE2014','POPESTIMATE2015']].std(axis=1)
         
-answer_seven()
-        
-        
-        
+    return df.loc[k.idxmax()]['CTYNAME']
 answer_seven()
 
 
